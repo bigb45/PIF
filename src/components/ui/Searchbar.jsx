@@ -1,15 +1,19 @@
 import SearchIcon from "@mui/icons-material/Search";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import SearchContext from "../context/SearchContext";
 
 function Searchbar() {
   const [query, setQuery] = useState("");
+  const { setHasSearch } = useContext(SearchContext);
+
   return (
     <form
       className="bg-white shadow-lg w-[50%] h-16 rounded-full flex-row items-center justify-center py-[15px] px-[30px] space-x-3"
       action="submit"
       onSubmit={(e) => {
         e.preventDefault();
-        window.location.href = `/search/${query}`;
+
+        // window.location.href = `/search/${query}`;
       }}
     >
       <SearchIcon className="text-slate-400 cursor-pointer" />
@@ -20,6 +24,10 @@ function Searchbar() {
         placeholder="Enter a company name or a short description"
         onChange={(e) => {
           setQuery(e.target.value);
+          setTimeout(() => {
+            if (e.target.value === "") setHasSearch(false);
+            else setHasSearch(true);
+          }, 700);
         }}
       ></input>
     </form>
