@@ -13,27 +13,28 @@ import {
   faFacebook,
   faTwitter,
   faInstagram,
+  faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Badge } from "./badge";
+import BadgeImage from "./badge_image";
 
 function CompanyCard(props) {
   return (
     <div>
-      <Card className="min-w-[350px] h-[500px] flex flex-col justify-between">
-        <CardHeader>
+      <Card className="min-w-[350px] h-[500px] flex flex-col justify-between hover:scale-105  transition-all ease-linear">
+        <CardHeader className="flex items-end">
           <div
             className="rounded-xl"
             style={{ width: "300px", height: "200px", overflow: "hidden" }}
           >
-            <Image
-              src="/test.jpg"
-              alt=""
-              width={300}
-              height={200}
-              style={{ objectFit: "contain" }}
+            <BadgeImage
+              src={props.src || "/test.jpg"}
+              matchPercentage={props.matchPercentage}
             />
           </div>
         </CardHeader>
+
         <CardContent className="space-y-8">
           <CardTitle>{props.title}</CardTitle>
           <CardDescription>{props.description}</CardDescription>
@@ -59,9 +60,9 @@ function CompanyCard(props) {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://www.instagram.com"
+              href="https://www.Linkedin.com"
             >
-              <FontAwesomeIcon icon={faInstagram} size="2x" />
+              <FontAwesomeIcon icon={faLinkedin} size="2x" />
             </a>
           </div>
         </CardFooter>
