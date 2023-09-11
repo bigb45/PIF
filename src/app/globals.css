@@ -107,25 +107,15 @@
 
 .searchbar {
   transition: all;
+  animation: grow 5s cubic-bezier(0.075, 0.82, 0.165, 1) infinite;
 }
-.searchbar:hover {
-  animation: grow 20s cubic-bezier(0.075, 0.82, 0.165, 1) infinite;
-}
-.searchbar:not(:hover) {
-  animation: shrink 10s cubic-bezier(0.075, 0.82, 0.165, 1) forwards infinite;
-}
+
 @keyframes grow {
   0% {
     background-size: 100% 100%;
   }
-  100% {
-    background-size: 110% 110%; /* Increase the background size as needed */
-  }
-}
-
-@keyframes shrink {
-  0% {
-    background-size: 110% 110%; /* Increase the background size as needed */
+  50% {
+    background-size: 110% 120%; /* Increase the background size as needed */
   }
   100% {
     background-size: 100% 100%;

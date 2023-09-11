@@ -4,17 +4,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "./button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
-function FloatingChatbot() {
+import MessageIcon from "@mui/icons-material/Message";
+import Chatbot from "@/components/ui/chatbot";
+function FloatingChatbot({ className }) {
   return (
-    <div>
-      <Popover>
+    <div className={`${className}`}>
+      <Popover variant="responsive">
         <PopoverTrigger asChild>
-          <Button variant="outline">Open popover</Button>
+          <div className="w-[64px] h-[64px] hover:scale-110 transition duration-300 rounded-full bg-black flex justify-center items-center">
+            <MessageIcon className="text-white w-8 h-8" />
+          </div>
         </PopoverTrigger>
-        <PopoverContent className="w-80"></PopoverContent>
+
+        <PopoverContent className="w-[600px] max-h-[700px] flex flex-col items-center justify-center">
+          <Chatbot />
+        </PopoverContent>
       </Popover>
     </div>
   );
