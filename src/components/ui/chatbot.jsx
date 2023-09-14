@@ -40,7 +40,7 @@ const Chatbot = ({ id }) => {
     setInputMessage("");
 
     setIsTyping(true);
-    let startChat = await axios.get("https://catfact.ninja/fact");
+    let startChat = await axios.get("https://catfact.ninja/fact"); // replace with start chat api endpoint
     setIsTyping(false);
     const botResponse = {
       role: "bot",
@@ -61,7 +61,7 @@ const Chatbot = ({ id }) => {
     setInputMessage("");
 
     setIsTyping(true);
-    let startChat = await axios.get("https://catfact.ninja/fact");
+    let startChat = await axios.get("https://catfact.ninja/fact"); // replace with continue chat api endpoint use id from start chat as id
     setIsTyping(false);
     const botResponse = {
       role: "bot",

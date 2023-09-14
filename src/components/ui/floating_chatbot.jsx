@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -6,7 +6,14 @@ import {
 } from "@/components/ui/popover";
 import MessageIcon from "@mui/icons-material/Message";
 import Chatbot from "@/components/ui/chatbot";
+import { Button } from "./button";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
 function FloatingChatbot({ className }) {
+  const [childKey, setChildKey] = useState(1);
+  const [restartchat, setRestartchat] = useState(false);
+  useEffect(() => {
+    setChildKey(2);
+  }, [restartchat]);
   return (
     <div className={`${className}`}>
       <Popover variant="responsive">

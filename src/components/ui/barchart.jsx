@@ -50,7 +50,7 @@ const BarChart = ({ data }) => {
   }, [data]);
 
   return (
-    <div style={{ width: "600px" }}>
+    <div style={{ width: "200px", height: "200px" }}>
       <canvas id="successChart"></canvas>
     </div>
   );
