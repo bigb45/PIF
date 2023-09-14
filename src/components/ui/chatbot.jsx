@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import Message from "./Message";
 import axios from "axios";
 import { Button } from "./button";
-import { Icon } from "@mui/material";
 import { Send } from "@mui/icons-material";
+import ChatSelectionButtons from "./chat_selection_buttons";
+import { Icon } from "@mui/material";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
 
 const Chatbot = ({ id }) => {
   const greeting = {
@@ -14,11 +16,41 @@ const Chatbot = ({ id }) => {
   const [messages, setMessages] = useState([greeting]);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [selection, setSelection] = useState(null);
   const messagesRef = React.useRef(null);
+
+  useEffect(() => {
+    if (selection) {
+      const newMessage = {
+        role: "user",
+        content: selection,
+      };
+      setMessages((prev) => {
+        return [...prev, newMessage];
+      });
+      setChatType();
+    }
+  }, [selection]);
 
   const handleSendMessage = async () => {
     if (inputMessage.trim() === "") return;
+    makeApiCall();
+  };
+  async function setChatType() {
+    setInputMessage("");
 
+    setIsTyping(true);
+    let startChat = await axios.get("https://catfact.ninja/fact");
+    setIsTyping(false);
+    const botResponse = {
+      role: "bot",
+      content: startChat.data.fact,
+    };
+    setMessages((prev) => {
+      return [...prev, botResponse];
+    });
+  }
+  async function makeApiCall() {
     const newMessage = {
       role: "user",
       content: inputMessage,
@@ -38,8 +70,7 @@ const Chatbot = ({ id }) => {
     setMessages((prev) => {
       return [...prev, botResponse];
     });
-  };
-
+  }
   useEffect(() => {
     if (messagesRef.current) {
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
@@ -64,16 +95,34 @@ const Chatbot = ({ id }) => {
           />
         ))}
         {isTyping && <Message role="bot" content="Thinking..." />}
+        {!selection && <ChatSelectionButtons setSelection={setSelection} />}
       </div>
-      <div className="p-4">
+
+      <div
+        className={`p-4 ${
+          selection ? "opacity-1" : "opacity-0"
+        } transition-all duration-500`}
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            console.log(inputMessage);
             handleSendMessage();
           }}
           className="flex items-center justify-"
         >
+          <div className="mr-2 h-full">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setSelection(null);
+                // setChatType();
+                setMessages([greeting]);
+              }}
+            >
+              <PlusCircledIcon className="w-[20px] h-[20px] " />
+            </Button>
+          </div>
+
           <input
             className="w-full p-2 rounded-lg shadow-md bg-zinc-200 focus:outline-none"
             type="text"

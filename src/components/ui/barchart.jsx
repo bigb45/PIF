@@ -3,7 +3,7 @@ import { Chart, registerables } from "chart.js";
 
 // Register Chart.js plugins
 Chart.register(...registerables);
-Chart.defaults.datasets.bar.maxBarThickness = 100;
+Chart.defaults.datasets.bar.maxBarThickness = 80;
 
 const BarChart = ({ data }) => {
   useEffect(() => {
@@ -19,13 +19,24 @@ const BarChart = ({ data }) => {
         maintainAspectRatio: false,
         aspectRatio: 1,
         legend: {
-          display: false,
+          display: true,
         },
         scales: {
           x: {
             display: false,
           },
           y: {
+            ticks: {
+              callback: function (value) {
+                return value + "%";
+              },
+            },
+            scaleLabel: {
+              display: true,
+              labelString: "Percentage",
+            },
+
+            max: 100,
             beginAtZero: true,
             grid: {
               display: false,

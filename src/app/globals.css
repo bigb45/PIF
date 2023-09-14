@@ -107,6 +107,7 @@
 
 .searchbar {
   transition: all;
+  background-size: 100% 100%;
   animation: grow 5s cubic-bezier(0.075, 0.82, 0.165, 1) infinite;
 }
 
@@ -115,9 +116,24 @@
     background-size: 100% 100%;
   }
   50% {
-    background-size: 110% 120%; /* Increase the background size as needed */
+    background-size: 110% 115%; /* Increase the background size as needed */
   }
   100% {
     background-size: 100% 100%;
+  }
+}
+
+.animated-title {
+  font-family: unset;
+  animation: showTextFromBottom 1s ease-in-out 0s 1 normal forwards running;
+}
+@keyframes showTextFromBottom {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
   }
 }
