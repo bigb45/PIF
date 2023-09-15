@@ -33,7 +33,7 @@ function SocialLinks({ facebook, twitter, linkedin, cb }) {
       >
         <FontAwesomeIcon icon={faLinkedin} size="2x" />
       </a>
-      <div className="p-1 bg-black text-white rounded-md">
+      <div className="p-1 bg-black text-white rounded-md flex items-center justify-center">
         <a
           target="_blank"
           rel="noopener noreferrer"

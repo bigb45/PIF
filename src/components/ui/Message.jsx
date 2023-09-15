@@ -43,7 +43,7 @@ const Message = ({ role, content }) => {
         >
           {isUserMessage ? null : role}
         </p>
-        <ReactMarkdown renderers={renderers} className="text-sm">
+        <ReactMarkdown renderers={renderers} className="text-sm line-break">
           {content}
         </ReactMarkdown>
       </div>
