@@ -91,14 +91,14 @@ export default function Home() {
     }
     setInvestmentRequestLoading(false);
     setHasCardCategory(true);
-    setCardCategories([
-      "Cannabis & Marijuana",
-      "Software & Web Development",
-      "Emerging Tech",
-      "Renewable Tech & Environment",
-      "Drones & Aerial Tech",
-      "Government & Military",
-    ]); // res.data
+
+    const categories = res?.data?.message;
+
+    const keyValueArray = Object.entries(categories);
+    keyValueArray.sort((a, b) => b[1] - a[1]);
+    const sortedKeys = keyValueArray.map((item) => item[0]);
+    console.log(sortedKeys);
+    setCardCategories(sortedKeys); // res.data
   };
 
   // handle search request handler
@@ -206,20 +206,23 @@ export default function Home() {
               className="bg-[#1c1917] hover:bg-[#32302e] transition-all duration-200 text-white  rounded-full animated-title py-7 px-10 text-[30px] font-thin hover:scale-110 cursor-pointer"
               onClick={() => {
                 scrollRef.current.scrollIntoView({ behavior: "smooth" });
-              }}>
+              }}
+            >
               Get started
             </button>
           </div>
         </div>
         <main
           className="flex flex-col items-center justify-center min-h-screen pt-2 pb-2"
-          ref={scrollRef}>
+          ref={scrollRef}
+        >
           <div
             className={`flex flex-col justify-center  transition-all duration-700 items-center space-y-4 ${
               hasCardCategory
                 ? "max-h-[1000px]"
                 : "max-h-[300px] translate-y-[20%]"
-            }`}>
+            }`}
+          >
             <Card className={` w-[800px] `}>
               <CardHeader>
                 <CardTitle>Find your next investment</CardTitle>
@@ -235,7 +238,8 @@ export default function Home() {
                     placeholder="Amount of money to be invested"
                     onChange={(e) => {
                       setInvestmentAmount(e.target.value);
-                    }}></Input>
+                    }}
+                  ></Input>
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center">
@@ -248,7 +252,8 @@ export default function Home() {
                     } else {
                       handleInvestmentRequest();
                     }
-                  }}>
+                  }}
+                >
                   {investmentRequestLoading ? (
                     <div className="flex ">
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -263,11 +268,12 @@ export default function Home() {
             <div
               className={`flex items-center justify-center transition-all duration-500 overflow-hidden ${
                 hasCardCategory ? "opacity-1" : "opacity-0"
-              }`}>
+              }`}
+            >
               <div className="grid grid-cols-2 grid-rows-3 gap-2 place-items-center ">
                 {cardCategories.map((element, index) => (
                   <GradientCard
-                    key={index} // Add a unique key to each card if these are rendered in a list.
+                    key={index}
                     imageUrl={encodeURIComponent(element)}
                     description={descriptions[element]}
                     category={element}
@@ -285,7 +291,8 @@ export default function Home() {
               isExpanded
                 ? "max-w-[800px] min-h-[800px] translate-y-3"
                 : "max-w-[650px] min-h-[500px] "
-            } transition-all duration-700 w-full h-fit `}>
+            } transition-all duration-700 w-full h-fit `}
+          >
             <CardHeader>
               <CardTitle>Likelihood of success</CardTitle>
               <CardDescription>
@@ -300,7 +307,8 @@ export default function Home() {
                   placeholder="How many times the company has been funded"
                   onChange={(e) => {
                     setFundingRounds(e.target.value);
-                  }}></Input>
+                  }}
+                ></Input>
               </div>
               <div>
                 <Label>Total Funding</Label>
@@ -309,7 +317,8 @@ export default function Home() {
                   placeholder="Total amount of money funded"
                   onChange={(e) => {
                     setTotalFunding(e.target.value);
-                  }}></Input>
+                  }}
+                ></Input>
               </div>
               <div className="flex flex-col">
                 <Label>First fund date</Label>
@@ -325,7 +334,8 @@ export default function Home() {
                     setShortDescription(e.target.value);
                   }}
                   type="text"
-                  placeholder="Company description"></Input>
+                  placeholder="Company description"
+                ></Input>
               </div>
               <div>
                 <Label>Foundation date</Label>
@@ -350,7 +360,8 @@ export default function Home() {
                     handleSuccessRequest();
                   }
                 }}
-                size="lg">
+                size="lg"
+              >
                 {successRequestLoading ? (
                   <div className="flex ">
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -365,11 +376,13 @@ export default function Home() {
             <CardContent
               className={`content flex flex-col items-center h-[200px] justify-center space-y-4 ${
                 isExpanded ? "visible" : "hidden"
-              }`}>
+              }`}
+            >
               <div
                 className={`${
                   isExpanded ? "max-h-[600px]" : ""
-                } items-center justify-center max-h-[800px] pt-2`}>
+                } items-center justify-center max-h-[800px] pt-2`}
+              >
                 {isExpanded && (
                   <div className="flex items-center justify-center w-full space-y-4 ">
                     <div className="flex flex-col items-center justify-center w-full space-y-4">
@@ -392,13 +405,15 @@ export default function Home() {
         <div className="relative transition-all duration-1000 bg-cover h-screen bg-slate-200 w-full flex flex-col justify-center items-center bg-[url('/searchBackground.jpg')]">
           <div
             className={`${searchResultsVisible ? "" : "pt-96"}
-             w-full flex justify-center items-center transition-all duration-700`}>
+             w-full flex justify-center items-center transition-all duration-700`}
+          >
             <Searchbar onSubmit={handleSearch}></Searchbar>
           </div>
           <div
             className={`absolute transform w-full transition-all duration-500 ${
               searchResultsVisible ? "opacity-0" : "opacity-1"
-            } `}>
+            } `}
+          >
             <p className="absolute right-[33%] text-white text-[60px] font-bold  translate-y-[70%]">
               Search For Your Next
             </p>
@@ -411,7 +426,8 @@ export default function Home() {
             <Scrollable
               className={`${
                 searchResultsVisible ? "opacity-1" : "opacity-0"
-              } transition-all duration-700`}>
+              } transition-all duration-700`}
+            >
               {searchResultsLoading ? (
                 // Render a loading indicator (e.g., spinner) while data is being fetched
                 <Loader2 className="w-20 h-20 text-white animate-spin" />
