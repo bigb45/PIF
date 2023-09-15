@@ -21,11 +21,26 @@ const Chatbot = () => {
   const messagesRef = React.useRef(null);
 
   useEffect(() => {
+    let messageContent;
+
+    switch (selection) {
+      case "suggest_sectors":
+        messageContent = "Suggest sectors";
+        break;
+      case "predict_success":
+        messageContent = "Predict success rate";
+        break;
+      case "find_similar_companies":
+        messageContent = "Find similar companies";
+        break;
+    }
+
     if (selection) {
       const newMessage = {
         role: "user",
-        content: selection,
+        content: messageContent,
       };
+
       setMessages((prev) => {
         return [...prev, newMessage];
       });
@@ -57,11 +72,24 @@ const Chatbot = () => {
     );
     // console.log(startChat);
     setId(startChat.data.conversation_id);
+    let staticResponse;
 
+    switch (selection) {
+      case "suggest_sectors":
+        staticResponse = "What is the amount you want to invest?";
+        break;
+      case "predict_success":
+        staticResponse =
+          "How many rounds of funding was the company able to raise?";
+        break;
+      case "find_similar_companies":
+        staticResponse = "What is a short description of your company?";
+        break;
+    }
     setIsTyping(false);
     const botResponse = {
       role: "bot",
-      content: startChat.data.messages,
+      content: staticResponse,
     };
 
     setMessages((prev) => {
@@ -110,7 +138,8 @@ const Chatbot = () => {
     <div className="w-full space-y-4 chatbot h-fit">
       <div
         className=" pt-8 chatbot-messages overflow-scroll h-[600px] transition-all duration-500 ease-in-out scrollbar-hide"
-        ref={messagesRef}>
+        ref={messagesRef}
+      >
         <div className="w-full h-[60px] text-white bg-black flex justify-center items-center rounded-tr-md rounded-tl-md fixed top-0 right-0">
           <p className="text-2xl">Messages</p>
         </div>
@@ -122,25 +151,22 @@ const Chatbot = () => {
             content={message.content}
           />
         ))}
-        {isTyping && (
-          <Message
-            role="bot"
-            content="Thinking..."
-          />
-        )}
+        {isTyping && <Message role="bot" content="Thinking..." />}
         {!selection && <ChatSelectionButtons setSelection={setSelection} />}
       </div>
 
       <div
         className={`p-4 ${
           selection ? "opacity-1" : "opacity-0"
-        } transition-all duration-500`}>
+        } transition-all duration-500`}
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="flex items-center justify-">
+          className="flex items-center justify-"
+        >
           <div className="h-full mr-2">
             <Button
               variant="outline"
@@ -148,7 +174,8 @@ const Chatbot = () => {
                 setSelection(null);
 
                 setMessages([greeting]);
-              }}>
+              }}
+            >
               <PlusCircledIcon className="w-[20px] h-[20px] " />
             </Button>
           </div>
@@ -160,10 +187,7 @@ const Chatbot = () => {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
           />
-          <Button
-            type="submit"
-            color="default"
-            className="absolute right-5">
+          <Button type="submit" color="default" className="absolute right-5">
             <Send className="fab fa-instagram"></Send>
           </Button>
         </form>
