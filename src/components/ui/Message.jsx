@@ -30,7 +30,7 @@ const Message = ({ role, content }) => {
           } text-sm mb-1 first-letter:uppercase`}>
           {isUserMessage ? null : role}
         </p>
-        <ReactMarkdown className="text-sm">{content}</ReactMarkdown>
+        {/* <ReactMarkdown className="text-sm">{content}</ReactMarkdown> */}
       </div>
     </div>
   );
