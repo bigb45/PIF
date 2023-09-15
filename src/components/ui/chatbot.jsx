@@ -7,7 +7,8 @@ import ChatSelectionButtons from "./chat_selection_buttons";
 import { Icon } from "@mui/material";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 
-const Chatbot = ({ id }) => {
+const Chatbot = () => {
+  let id = 0;
   const greeting = {
     role: "bot",
     content: "Hello, what can I do for you?",
@@ -40,12 +41,15 @@ const Chatbot = ({ id }) => {
     setInputMessage("");
 
     setIsTyping(true);
-    let startChat = await axios.get("https://catfact.ninja/fact"); // replace with start chat api endpoint
+    let startChat = await axios.post("http://127.0.0.1:5000/start_chat", {
+      endpoint: selection,
+    }); // replace with start chat api endpoint
     setIsTyping(false);
     const botResponse = {
       role: "bot",
-      content: startChat.data.fact,
+      content: startChat.data.messages,
     };
+    id = startChat.data.id;
     setMessages((prev) => {
       return [...prev, botResponse];
     });
@@ -61,7 +65,12 @@ const Chatbot = ({ id }) => {
     setInputMessage("");
 
     setIsTyping(true);
-    let startChat = await axios.get("https://catfact.ninja/fact"); // replace with continue chat api endpoint use id from start chat as id
+    let startChat = await axios.post(
+      `http://127.0.0.1:5000/continue_chat/${id}/${selection}`,
+      {
+        message: inputMessage,
+      }
+    ); // replace with continue chat api endpoint use id from start chat as id
     setIsTyping(false);
     const botResponse = {
       role: "bot",
@@ -81,8 +90,7 @@ const Chatbot = ({ id }) => {
     <div className="w-full space-y-4 chatbot h-fit">
       <div
         className=" pt-8 chatbot-messages overflow-scroll h-[600px] transition-all duration-500 ease-in-out scrollbar-hide"
-        ref={messagesRef}
-      >
+        ref={messagesRef}>
         <div className="w-full h-[60px] text-white bg-black flex justify-center items-center rounded-tr-md rounded-tl-md fixed top-0 right-0">
           <p className="text-2xl">Messages</p>
         </div>
@@ -94,31 +102,33 @@ const Chatbot = ({ id }) => {
             content={message.content}
           />
         ))}
-        {isTyping && <Message role="bot" content="Thinking..." />}
+        {isTyping && (
+          <Message
+            role="bot"
+            content="Thinking..."
+          />
+        )}
         {!selection && <ChatSelectionButtons setSelection={setSelection} />}
       </div>
 
       <div
         className={`p-4 ${
           selection ? "opacity-1" : "opacity-0"
-        } transition-all duration-500`}
-      >
+        } transition-all duration-500`}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="flex items-center justify-"
-        >
-          <div className="mr-2 h-full">
+          className="flex items-center justify-">
+          <div className="h-full mr-2">
             <Button
               variant="outline"
               onClick={() => {
                 setSelection(null);
                 // setChatType();
                 setMessages([greeting]);
-              }}
-            >
+              }}>
               <PlusCircledIcon className="w-[20px] h-[20px] " />
             </Button>
           </div>
@@ -130,7 +140,10 @@ const Chatbot = ({ id }) => {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
           />
-          <Button type="submit" color="default" className="absolute right-5">
+          <Button
+            type="submit"
+            color="default"
+            className="absolute right-5">
             <Send className="fab fa-instagram"></Send>
           </Button>
         </form>

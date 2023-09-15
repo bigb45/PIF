@@ -3,29 +3,26 @@ import { Button } from "./button";
 
 function ChatSelectionButtons({ setSelection }) {
   return (
-    <div className="flex space-x-4 justify-center items-center">
+    <div className="flex items-center justify-center space-x-4">
       <Button
         variant="outline"
         onClick={() => {
-          setSelection("similar companies");
-        }}
-      >
+          setSelection("find_similar_companies");
+        }}>
         Similar companies
       </Button>
       <Button
         variant="outline"
         onClick={() => {
-          setSelection("investment evaluation");
-        }}
-      >
+          setSelection("predict_success");
+        }}>
         Investment evaluation
       </Button>
       <Button
         variant="outline"
         onClick={() => {
-          setSelection("best investment for you");
-        }}
-      >
+          setSelection("suggest_sectors");
+        }}>
         Best investment for you
       </Button>
     </div>

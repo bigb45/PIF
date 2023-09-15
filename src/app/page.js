@@ -83,9 +83,9 @@ export default function Home() {
     setInvestmentRequestLoading(true);
     let res = null;
     try {
-      res = await axios.get(
-        `http://localhost:5000/investment?amount=${investmentAmount}`
-      );
+      res = await axios.post(`http://127.0.0.1:5000/suggest_sectors`, {
+        investment_amount: investmentAmount,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -109,9 +109,9 @@ export default function Home() {
 
     let res = null;
     try {
-      res = await axios.get(
-        `http://localhost:5000/search?query=${searchQuery}`
-      );
+      res = await axios.post(`http://127.0.0.1:5000/find_similar_companies`, {
+        description: searchQuery,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -130,17 +130,17 @@ export default function Home() {
     setCounterValue(0);
     setActualValue(0);
     const request = {
-      fundingRounds: fundingRounds,
-      totalFunding: totalFunding,
-      firstFundDate: firstFundDate,
-      shortDescription: shortDescription,
-      foundationDate: foundationDate,
+      funding_rounds: fundingRounds,
+      funding_total_usd: totalFunding,
+      first_funding_date: firstFundDate,
+      short_description: shortDescription,
+      date_of_foundation: foundationDate,
     };
     console.log(request);
     setSuccessRequestLoading(true);
     let res = null;
     try {
-      res = await axios.post("http://localhost:5000/success", request);
+      res = await axios.post("http://127.0.0.1:5000/predict_success", request);
     } catch (e) {
       console.log(e);
     }
@@ -189,12 +189,12 @@ export default function Home() {
     <SearchContext.Provider value={{ setSearchResultsVisible, setSearchQuery }}>
       <div>
         <FloatingChatbot className={"fixed bottom-[40px] right-[40px] z-10"} />
-        <div className=" fixed z-20 text-white top-0 flex items-center justify-center w-full p-4 space-x-24 text-lg bg-primary h-fit text-onPrimary">
+        <div className="fixed top-0 z-20 flex items-center justify-center w-full p-4 space-x-24 text-lg text-white bg-primary h-fit text-onPrimary">
           <a href="/about">About</a>
           <a href="#home-section">Home</a>
           <a href="/contact">Contact</a>
         </div>
-        <div className=" transition-all duration-1000 searchbar h-screen  bg-slate-200 w-full flex flex-col justify-center items-center  ">
+        <div className="flex flex-col items-center justify-center w-full h-screen transition-all duration-1000 searchbar bg-slate-200">
           {/* bg-[url('/background.jpg')] */}
           <p className="animated-title text-[80px]  text-white font-thin">
             The best investment tool for you.
@@ -206,23 +206,20 @@ export default function Home() {
               className="bg-[#1c1917] hover:bg-[#32302e] transition-all duration-200 text-white  rounded-full animated-title py-7 px-10 text-[30px] font-thin hover:scale-110 cursor-pointer"
               onClick={() => {
                 scrollRef.current.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
+              }}>
               Get started
             </button>
           </div>
         </div>
         <main
-          className="flex min-h-screen flex-col items-center justify-center pt-2 pb-2"
-          ref={scrollRef}
-        >
+          className="flex flex-col items-center justify-center min-h-screen pt-2 pb-2"
+          ref={scrollRef}>
           <div
             className={`flex flex-col justify-center  transition-all duration-700 items-center space-y-4 ${
               hasCardCategory
                 ? "max-h-[1000px]"
                 : "max-h-[300px] translate-y-[20%]"
-            }`}
-          >
+            }`}>
             <Card className={` w-[800px] `}>
               <CardHeader>
                 <CardTitle>Find your next investment</CardTitle>
@@ -238,8 +235,7 @@ export default function Home() {
                     placeholder="Amount of money to be invested"
                     onChange={(e) => {
                       setInvestmentAmount(e.target.value);
-                    }}
-                  ></Input>
+                    }}></Input>
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center">
@@ -252,11 +248,10 @@ export default function Home() {
                     } else {
                       handleInvestmentRequest();
                     }
-                  }}
-                >
+                  }}>
                   {investmentRequestLoading ? (
                     <div className="flex ">
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       Please wait
                     </div>
                   ) : (
@@ -268,9 +263,8 @@ export default function Home() {
             <div
               className={`flex items-center justify-center transition-all duration-500 overflow-hidden ${
                 hasCardCategory ? "opacity-1" : "opacity-0"
-              }`}
-            >
-              <div className="grid grid-cols-2 grid-rows-3  gap-2 place-items-center ">
+              }`}>
+              <div className="grid grid-cols-2 grid-rows-3 gap-2 place-items-center ">
                 {cardCategories.map((element, index) => (
                   <GradientCard
                     key={index} // Add a unique key to each card if these are rendered in a list.
@@ -285,21 +279,20 @@ export default function Home() {
           </div>
         </main>
 
-        <div className="w-full h-screen flex items-center justify-center">
+        <div className="flex items-center justify-center w-full h-screen">
           <Card
             className={`${
               isExpanded
                 ? "max-w-[800px] min-h-[800px] translate-y-3"
                 : "max-w-[650px] min-h-[500px] "
-            } transition-all duration-700 w-full h-fit `}
-          >
+            } transition-all duration-700 w-full h-fit `}>
             <CardHeader>
               <CardTitle>Likelihood of success</CardTitle>
               <CardDescription>
                 How likely are you to get a return on your investment?
               </CardDescription>
             </CardHeader>
-            <CardContent className="content space-y-8">
+            <CardContent className="space-y-8 content">
               <div>
                 <Label>Funding rounds</Label>
                 <Input
@@ -307,8 +300,7 @@ export default function Home() {
                   placeholder="How many times the company has been funded"
                   onChange={(e) => {
                     setFundingRounds(e.target.value);
-                  }}
-                ></Input>
+                  }}></Input>
               </div>
               <div>
                 <Label>Total Funding</Label>
@@ -317,8 +309,7 @@ export default function Home() {
                   placeholder="Total amount of money funded"
                   onChange={(e) => {
                     setTotalFunding(e.target.value);
-                  }}
-                ></Input>
+                  }}></Input>
               </div>
               <div className="flex flex-col">
                 <Label>First fund date</Label>
@@ -334,8 +325,7 @@ export default function Home() {
                     setShortDescription(e.target.value);
                   }}
                   type="text"
-                  placeholder="Company description"
-                ></Input>
+                  placeholder="Company description"></Input>
               </div>
               <div>
                 <Label>Foundation date</Label>
@@ -344,7 +334,7 @@ export default function Home() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="footer flex justify-center">
+            <CardFooter className="flex justify-center footer">
               <Button
                 disabled={successRequestLoading}
                 onClick={() => {
@@ -360,11 +350,10 @@ export default function Home() {
                     handleSuccessRequest();
                   }
                 }}
-                size="lg"
-              >
+                size="lg">
                 {successRequestLoading ? (
                   <div className="flex ">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Please wait
                   </div>
                 ) : (
@@ -376,23 +365,21 @@ export default function Home() {
             <CardContent
               className={`content flex flex-col items-center h-[200px] justify-center space-y-4 ${
                 isExpanded ? "visible" : "hidden"
-              }`}
-            >
+              }`}>
               <div
                 className={`${
                   isExpanded ? "max-h-[600px]" : ""
-                } items-center justify-center max-h-[800px] pt-2`}
-              >
+                } items-center justify-center max-h-[800px] pt-2`}>
                 {isExpanded && (
-                  <div className="flex  items-center justify-center space-y-4  w-full ">
-                    <div className="flex flex-col items-center justify-center space-y-4 w-full">
+                  <div className="flex items-center justify-center w-full space-y-4 ">
+                    <div className="flex flex-col items-center justify-center w-full space-y-4">
                       <BarChart data={chartData} />
                     </div>
-                    <p className="text-black text-2xl font-bold">
+                    <p className="text-2xl font-bold text-black">
                       Likelihood of success
                     </p>
 
-                    <p className="text-black text-6xl font-bold">
+                    <p className="text-6xl font-bold text-black">
                       {counterValue}%
                     </p>
                   </div>
@@ -405,15 +392,13 @@ export default function Home() {
         <div className="relative transition-all duration-1000 bg-cover h-screen bg-slate-200 w-full flex flex-col justify-center items-center bg-[url('/searchBackground.jpg')]">
           <div
             className={`${searchResultsVisible ? "" : "pt-96"}
-             w-full flex justify-center items-center transition-all duration-700`}
-          >
+             w-full flex justify-center items-center transition-all duration-700`}>
             <Searchbar onSubmit={handleSearch}></Searchbar>
           </div>
           <div
             className={`absolute transform w-full transition-all duration-500 ${
               searchResultsVisible ? "opacity-0" : "opacity-1"
-            } `}
-          >
+            } `}>
             <p className="absolute right-[33%] text-white text-[60px] font-bold  translate-y-[70%]">
               Search For Your Next
             </p>
@@ -426,11 +411,10 @@ export default function Home() {
             <Scrollable
               className={`${
                 searchResultsVisible ? "opacity-1" : "opacity-0"
-              } transition-all duration-700`}
-            >
+              } transition-all duration-700`}>
               {searchResultsLoading ? (
                 // Render a loading indicator (e.g., spinner) while data is being fetched
-                <Loader2 className="animate-spin w-20 h-20 text-white" />
+                <Loader2 className="w-20 h-20 text-white animate-spin" />
               ) : (
                 // Render the cards when data is available
                 searchResults.map((card, i) => (
