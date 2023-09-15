@@ -129,12 +129,14 @@ export default function Home() {
   async function handleSuccessRequest() {
     setCounterValue(0);
     setActualValue(0);
+    formattedFirstFundDate = `${firstFundDate.getFullYear()}-${firstFundDate.getMonth()}-${firstFundDate.getDate()}`; // 2021-10-20
+    formattedFoundationDate = `${foundationDate.getFullYear()}-${foundationDate.getMonth()}-${foundationDate.getDate()}`; // 2021-10-20
     const request = {
       funding_rounds: fundingRounds,
       funding_total_usd: totalFunding,
-      first_funding_date: firstFundDate,
+      first_funding_date: formattedFirstFundDate,
       short_description: shortDescription,
-      date_of_foundation: foundationDate,
+      date_of_foundation: formattedFoundationDate,
     };
     console.log(request);
     setSuccessRequestLoading(true);
@@ -149,7 +151,7 @@ export default function Home() {
 
     updateChartData();
     // data.datasets[0].data = [Number(fundingRounds)]; // res.data.successrate
-    setActualValue(Number(fundingRounds)); // res.data.successrate
+    setActualValue(Number(res.data.message)); // res.data.successrate
   }
   useEffect(() => {
     const step = Math.ceil(actualValue / 100); // Define the step size for counting
