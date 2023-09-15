@@ -137,3 +137,7 @@
     transform: translateY(0%);
   }
 }
+
+.line-break {
+  white-space: pre-wrap;
+}

@@ -45,7 +45,7 @@ const Message = ({ role, content }) => {
         </p>
         <ReactMarkdown
           renderers={renderers}
-          className="text-sm">
+          className="text-sm line-break">
           {content}
         </ReactMarkdown>
       </div>
