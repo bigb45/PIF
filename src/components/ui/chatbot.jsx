@@ -55,7 +55,8 @@ const Chatbot = () => {
         withCredentials: true,
       }
     );
-    setId(startChat.data.id);
+    // console.log(startChat);
+    setId(startChat.data.conversation_id);
 
     setIsTyping(false);
     const botResponse = {
@@ -93,7 +94,7 @@ const Chatbot = () => {
     setIsTyping(false);
     const botResponse = {
       role: "bot",
-      content: startChat.data.fact,
+      content: startChat.data.message,
     };
     setMessages((prev) => {
       return [...prev, botResponse];
@@ -109,8 +110,7 @@ const Chatbot = () => {
     <div className="w-full space-y-4 chatbot h-fit">
       <div
         className=" pt-8 chatbot-messages overflow-scroll h-[600px] transition-all duration-500 ease-in-out scrollbar-hide"
-        ref={messagesRef}
-      >
+        ref={messagesRef}>
         <div className="w-full h-[60px] text-white bg-black flex justify-center items-center rounded-tr-md rounded-tl-md fixed top-0 right-0">
           <p className="text-2xl">Messages</p>
         </div>
@@ -122,22 +122,25 @@ const Chatbot = () => {
             content={message.content}
           />
         ))}
-        {isTyping && <Message role="bot" content="Thinking..." />}
+        {isTyping && (
+          <Message
+            role="bot"
+            content="Thinking..."
+          />
+        )}
         {!selection && <ChatSelectionButtons setSelection={setSelection} />}
       </div>
 
       <div
         className={`p-4 ${
           selection ? "opacity-1" : "opacity-0"
-        } transition-all duration-500`}
-      >
+        } transition-all duration-500`}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="flex items-center justify-"
-        >
+          className="flex items-center justify-">
           <div className="h-full mr-2">
             <Button
               variant="outline"
@@ -145,8 +148,7 @@ const Chatbot = () => {
                 setSelection(null);
 
                 setMessages([greeting]);
-              }}
-            >
+              }}>
               <PlusCircledIcon className="w-[20px] h-[20px] " />
             </Button>
           </div>
@@ -158,7 +160,10 @@ const Chatbot = () => {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
           />
-          <Button type="submit" color="default" className="absolute right-5">
+          <Button
+            type="submit"
+            color="default"
+            className="absolute right-5">
             <Send className="fab fa-instagram"></Send>
           </Button>
         </form>
