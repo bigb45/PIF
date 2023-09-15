@@ -2,9 +2,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import React, { useState, useContext } from "react";
 import SearchContext from "../context/SearchContext";
 
-function Searchbar() {
+function Searchbar({ onSubmit }) {
   const [query, setQuery] = useState("");
-  const { setHasSearch } = useContext(SearchContext);
+  const { setSearchResultsVisible, setSearchQuery } = useContext(SearchContext);
 
   return (
     <form
@@ -12,7 +12,8 @@ function Searchbar() {
       action="submit"
       onSubmit={(e) => {
         e.preventDefault();
-
+        setSearchQuery(query);
+        onSubmit();
         // window.location.href = `/search/${query}`;
       }}
     >
@@ -23,11 +24,8 @@ function Searchbar() {
         type="search"
         placeholder="Enter a company name or a short description"
         onChange={(e) => {
-          setQuery(e.target.value);
-          setTimeout(() => {
-            if (e.target.value === "") setHasSearch(false);
-            else setHasSearch(true);
-          }, 700);
+          setSearchQuery(e.target.value);
+          if (e.target.value === "") setSearchResultsVisible(false);
         }}
       ></input>
     </form>

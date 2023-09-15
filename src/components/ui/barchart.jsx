@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Chart, registerables } from "chart.js";
 
 // Register Chart.js plugins
@@ -6,12 +6,29 @@ Chart.register(...registerables);
 Chart.defaults.datasets.bar.maxBarThickness = 80;
 
 const BarChart = ({ data }) => {
+  const chartRef = useRef(null);
+
   useEffect(() => {
+    // Check if the chart instance exists
+    if (chartRef.current) {
+      // Update the chart's data
+      chartRef.current.data = data;
+      console.log("data updated ", data);
+      // Update the chart
+      chartRef.current.update();
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (chartRef.current) {
+      // Destroy the existing chart
+      chartRef.current.destroy();
+    }
     // Get the canvas element
     const ctx = document.getElementById("successChart").getContext("2d");
 
     // Create the chart
-    new Chart(ctx, {
+    const chartInstance = new Chart(ctx, {
       type: "bar",
       data: data,
       options: {
@@ -35,18 +52,19 @@ const BarChart = ({ data }) => {
               display: true,
               labelString: "Percentage",
             },
-
             max: 100,
             beginAtZero: true,
             grid: {
               display: false,
             },
             position: "right",
-            // Place y-axis labels to the right of bars
           },
         },
       },
     });
+
+    // Store the chart instance in the ref
+    chartRef.current = chartInstance;
   }, [data]);
 
   return (

@@ -2,7 +2,6 @@ import React from "react";
 
 function GradientCard({ imageUrl, className, category, description }) {
   let url = "/" + imageUrl + ".jpg";
-  console.log(url);
   const backgroundImageStyle = {
     backgroundImage: `url(${url})`,
     backgroundSize: "cover",
