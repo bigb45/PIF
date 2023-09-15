@@ -221,9 +221,9 @@ export default function Home() {
           <a href="#home-section">Home</a>
           <a href="/contact">Contact</a>
         </div>
-        <div className="flex flex-col items-center justify-center w-full h-screen transition-all duration-1000 searchbar bg-slate-200">
+        <div className="bg-[url('/background.jpg')] flex flex-col items-center justify-center w-full h-screen transition-all duration-1000 searchbar bg-slate-200">
           {/* bg-[url('/background.jpg')] */}
-          <p className="animated-title text-[80px]  text-white font-thin">
+          <p className=" animated-title text-[80px]  text-white font-thin">
             The best investment tool for you.
           </p>
           <div className="transition-all hover:scale-105">

@@ -5,25 +5,28 @@ function ChatSelectionButtons({ setSelection }) {
   return (
     <div className="flex items-center justify-center space-x-4">
       <Button
+        className="p-8 rounded-full"
         variant="outline"
         onClick={() => {
           setSelection("find_similar_companies");
         }}>
-        Similar companies
+        Find similar companies
       </Button>
       <Button
+        className="p-8 rounded-full"
         variant="outline"
         onClick={() => {
           setSelection("predict_success");
         }}>
-        Investment evaluation
+        Find success rate of a company
       </Button>
       <Button
+        className="p-8 rounded-full"
         variant="outline"
         onClick={() => {
           setSelection("suggest_sectors");
         }}>
-        Best investment for you
+        Find best sectors based on your investment
       </Button>
     </div>
   );
