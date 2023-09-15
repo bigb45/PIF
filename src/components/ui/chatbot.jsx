@@ -8,7 +8,6 @@ import { Icon } from "@mui/material";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 
 const Chatbot = () => {
-  let id = 0;
   const greeting = {
     role: "bot",
     content: "Hello, what can I do for you?",
@@ -18,6 +17,7 @@ const Chatbot = () => {
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [selection, setSelection] = useState(null);
+  const [id, setId] = useState(null);
   const messagesRef = React.useRef(null);
 
   useEffect(() => {
@@ -33,23 +33,36 @@ const Chatbot = () => {
     }
   }, [selection]);
 
+  useEffect(() => {
+    console.log("id", id, selection, inputMessage);
+  }, [id, selection, inputMessage]);
   const handleSendMessage = async () => {
     if (inputMessage.trim() === "") return;
     makeApiCall();
   };
+
   async function setChatType() {
     setInputMessage("");
 
     setIsTyping(true);
-    let startChat = await axios.post("http://127.0.0.1:5000/start_chat", {
-      endpoint: selection,
-    }); // replace with start chat api endpoint
+    let startChat = await axios.post(
+      "http://127.0.0.1:5000/start_chat",
+      {
+        endpoint: selection,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+    setId(startChat.data.id);
+
     setIsTyping(false);
     const botResponse = {
       role: "bot",
       content: startChat.data.messages,
     };
-    id = startChat.data.id;
+
     setMessages((prev) => {
       return [...prev, botResponse];
     });
@@ -59,18 +72,24 @@ const Chatbot = () => {
       role: "user",
       content: inputMessage,
     };
+
     setMessages((prev) => {
       return [...prev, newMessage];
     });
-    setInputMessage("");
 
+    setInputMessage("");
     setIsTyping(true);
+
     let startChat = await axios.post(
       `http://127.0.0.1:5000/continue_chat/${id}/${selection}`,
       {
         message: inputMessage,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       }
-    ); // replace with continue chat api endpoint use id from start chat as id
+    );
     setIsTyping(false);
     const botResponse = {
       role: "bot",
@@ -90,7 +109,8 @@ const Chatbot = () => {
     <div className="w-full space-y-4 chatbot h-fit">
       <div
         className=" pt-8 chatbot-messages overflow-scroll h-[600px] transition-all duration-500 ease-in-out scrollbar-hide"
-        ref={messagesRef}>
+        ref={messagesRef}
+      >
         <div className="w-full h-[60px] text-white bg-black flex justify-center items-center rounded-tr-md rounded-tl-md fixed top-0 right-0">
           <p className="text-2xl">Messages</p>
         </div>
@@ -102,33 +122,31 @@ const Chatbot = () => {
             content={message.content}
           />
         ))}
-        {isTyping && (
-          <Message
-            role="bot"
-            content="Thinking..."
-          />
-        )}
+        {isTyping && <Message role="bot" content="Thinking..." />}
         {!selection && <ChatSelectionButtons setSelection={setSelection} />}
       </div>
 
       <div
         className={`p-4 ${
           selection ? "opacity-1" : "opacity-0"
-        } transition-all duration-500`}>
+        } transition-all duration-500`}
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="flex items-center justify-">
+          className="flex items-center justify-"
+        >
           <div className="h-full mr-2">
             <Button
               variant="outline"
               onClick={() => {
                 setSelection(null);
-                // setChatType();
+
                 setMessages([greeting]);
-              }}>
+              }}
+            >
               <PlusCircledIcon className="w-[20px] h-[20px] " />
             </Button>
           </div>
@@ -140,10 +158,7 @@ const Chatbot = () => {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
           />
-          <Button
-            type="submit"
-            color="default"
-            className="absolute right-5">
+          <Button type="submit" color="default" className="absolute right-5">
             <Send className="fab fa-instagram"></Send>
           </Button>
         </form>
