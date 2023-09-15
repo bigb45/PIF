@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
-function SocialLinks({ facebook, twitter, linkedin }) {
+function SocialLinks({ facebook, twitter, linkedin, cb }) {
   return (
     <div className="flex space-x-5">
       <a
@@ -32,6 +32,14 @@ function SocialLinks({ facebook, twitter, linkedin }) {
         href={linkedin || "https://www.linkedin.com"}
       >
         <FontAwesomeIcon icon={faLinkedin} size="2x" />
+      </a>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={cb || "https://www.crunchbase.com"}
+      >
+        {/* <FontAwesomeIcon icon={faLinkedin} size="2x" /> */}
+        cb
       </a>
     </div>
   );

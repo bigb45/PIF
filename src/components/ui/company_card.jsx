@@ -17,7 +17,12 @@ import CircleLoading from "./circle_loading";
 function CompanyCard(props) {
   return (
     <div>
-      <Card className="min-w-[350px] h-[500px] flex flex-col justify-between hover:scale-105  transition-all ease-linear">
+      <Card
+        className="min-w-[350px] h-[500px] flex flex-col justify-between hover:scale-105  transition-all ease-linear"
+        onClick={() => {
+          window.open(props.companyUrl, "_blank");
+        }}
+      >
         <CardHeader className="flex items-end">
           {props.isLoading ? (
             <ImageSkeleton />
@@ -45,7 +50,16 @@ function CompanyCard(props) {
           )}
         </CardContent>
         <CardFooter className="flex justify-center">
-          {props.isLoading ? <CircleLoading count={3} /> : <SocialLinks />}
+          {props.isLoading ? (
+            <CircleLoading count={3} />
+          ) : (
+            <SocialLinks
+              facebook={props.facebook}
+              twitter={props.twitter}
+              linkedin={props.linkedin}
+              cb={props.cbUrl}
+            />
+          )}
         </CardFooter>
       </Card>
     </div>
