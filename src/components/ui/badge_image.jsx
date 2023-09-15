@@ -12,8 +12,8 @@ function BadgeImage(props) {
         height={200}
         style={{ objectFit: "cover" }}
       />
-      <Badge className="absolute top-2 right-2 flex justify-center items-center rounded-full text-white">
-        {props.matchPercentage + "%" || "0%"}
+      <Badge className="absolute flex items-center justify-center text-white rounded-full top-2 right-2">
+        {Math.round(props.matchPercentage) + "%" || "0%"}
       </Badge>
     </div>
   );
